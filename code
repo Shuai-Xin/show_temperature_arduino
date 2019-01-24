@@ -1,0 +1,48 @@
+//引入Wire與LiquidCrystal_I2C函式庫
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+//BMP library come on in plz
+#include <SFE_BMP180.h>
+
+// 設定 LCD I2C 位址
+// Set the pins on the I2C chip used for LCD connections:
+// addr, en,rw,rs,d4,d5,d6,d7,bl,blpol
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+
+//don't konw what this step means
+SFE_BMP180 tpt;
+
+void setup() {
+// 初始化 LCD，一行 16 的字元，共 2 行，預設開啟背光
+lcd.begin(16, 2);
+//BMP gogo
+tpt.begin();
+
+//dont know for what
+lcd.backlight();
+
+// 輸出初始化文字
+lcd.setCursor(0, 0); // 設定游標位置在第一行行首
+lcd.print("guess the T now");
+delay(500);
+lcd.setCursor(9, 1);
+lcd.print("ready?");
+delay(1000);
+lcd.clear(); //顯示清除
+lcd.setCursor(1, 0);
+lcd.print("START!");
+delay(800);
+lcd.clear();
+}
+void loop() {
+//BMP
+double T;
+tpt.startTemperature();
+tpt.getTemperature(T);
+//
+lcd.setCursor(6, 0);
+lcd.print(T,2);
+lcd.setCursor(0, 1);
+lcd.print("Made by ShuaiXin");
+delay(500);
+}
